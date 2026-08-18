@@ -4,7 +4,11 @@ const cors = require('cors');
 
 const app = express();
 const prisma = new PrismaClient();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+})
 
 app.use(express.json());
 app.use(cors());
@@ -36,8 +40,4 @@ app.patch('/applications/:id', async (req, res) => {
         data: req.body
     });
     res.json(updatedApplication);
-})
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
 })
