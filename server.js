@@ -14,9 +14,9 @@ app.use(express.json());
 app.use(cors());
 
 app.post('/applications', async (req, res) => {
-    const { company, position, status, date, notes } = req.body;
+    const { company, position, status, date, note } = req.body;
     const newApplication = await prisma.application.create({
-        data: { company, position, status, date, notes }
+        data: { company, position, status, date, note }
     });
 
     res.json(newApplication);
