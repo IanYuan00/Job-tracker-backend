@@ -23,3 +23,11 @@ model Application {
   createAt   DateTime @default(now())
   updateAt   DateTime @updatedAt
 }
+
+model StatusHistory {
+  id              String    @id @default(uuid())
+  applicationId   String
+  fromStatus      String?
+  toStatus        String
+  changedAt       DateTime  @default(now())
+}

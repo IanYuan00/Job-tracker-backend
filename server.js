@@ -50,13 +50,32 @@ app.patch('/applications/:id', async (req, res) => {
         return res.status(400).json({ error: 'Position cannot be empty.' })
     }
     try {
+        const existingApplication = await prisma.application.findUnique({ where: { id } });
         const updatedApplication = await prisma.application.update({
             where: { id },
             data: req.body
         });
+        if ('status' in req.body && req.body.status !== existingApplication.status) {
+            await prisma.statusHistory.create({
+                data: {
+                    applicationId: id,
+                    fromStatus: existingApplication.status,
+                    toStatus: req.body.status
+                }
+            });
+        }
         res.json(updatedApplication);
     } catch (error) {
         res.status(404).json({ error: 'Application no longer exist.' })
     }
 
+})
+
+app.get('/applications/:id/history', async (req, res) => {
+    const { id } = req.params;
+    const history = await prisma.statusHistory.findMany({
+        where: { applicationId: id },
+        orderBy: { changedAt: 'asc' }
+    })
+    res.json(history);
 })
