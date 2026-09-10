@@ -21,6 +21,13 @@ app.post('/applications', async (req, res) => {
     const newApplication = await prisma.application.create({
         data: { company, position, status, date, notes }
     });
+    const statusHistory = await prisma.statusHistory.create({
+        data: {
+            applicationId: newApplication.id,
+            fromStatus: null,
+            toStatus: status
+        }
+    })
 
     res.json(newApplication);
 })
