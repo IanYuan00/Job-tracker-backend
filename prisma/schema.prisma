@@ -15,6 +15,7 @@ datasource db {
 
 model Application {
   id         String   @id @default(uuid())
+  userId     String
   company    String
   position   String
   status     String
@@ -30,4 +31,12 @@ model StatusHistory {
   fromStatus      String?
   toStatus        String
   changedAt       DateTime  @default(now())
+}
+
+model User {
+  id              String    @id @default(uuid())
+  username        String
+  email           String    @unique
+  password        String
+  createAt        DateTime  @default(now())
 }
